@@ -1,8 +1,6 @@
 import "./Quiz.css";
 import React, { useState } from "react";
 import questions from "./questions";
-import { CSVLink } from "react-csv";
-import App from "./App";
 
 export default function Quiz() {
   const [results, setResults] = useState([]);
@@ -13,22 +11,29 @@ export default function Quiz() {
   const [showScore, setShowScore] = useState(false);
   const [showAnswer, setAnswers] = useState(false);
   const [showButton, setButton] = useState(true);
+  const [correctText, setCorrectText] = useState(false);
+  const [wrongText, setWrongText] = useState(false);
 
   const handleAnswerButtonClick = (correct, choice) => {
+    if (correct) {
+      setCorrectText(true);
+      setScore(score + 1);
+    } else {
+      setWrongText(true);
+    }
     setAnswers(false);
     setContext(true);
     setButton(true);
     results.push(choice);
     setResults(results);
-    if (correct) {
-      setScore(score + 1);
-    }
     console.log(results);
   };
 
   const nextButtonClick = () => {
     const nextQuestion = currentQuestion + 1;
     setCurrentQuestion(nextQuestion);
+    setCorrectText(false);
+    setWrongText(false);
     if (nextQuestion < questions.length - 1) {
       setCurrentQuestion(nextQuestion);
       setQuestion(true);
@@ -64,7 +69,7 @@ export default function Quiz() {
   }
 
   return (
-    <div className="app">
+    <div className="app bg-stone-300 p-6 max-w-2xl mx-auto rounded-xl shadow-lg space-x-4 flex flex-col space-y-4 m-6">
       {showScore && (
         <div className="score-section">
           You scored {score} out of {questions.length}
@@ -77,27 +82,29 @@ export default function Quiz() {
               <span>Question {currentQuestion}</span>/{questions.length}
             </div>
             <div className="question-text">
-              {questions[currentQuestion].question}
+              <p className="font-bold">{questions[currentQuestion].question}</p>
             </div>
           </div>
         </>
       )}
       {showAnswer && (
         <>
-          <div className="answer-section">
+          <div className="answer-section grid gap-4 grid-cols-2">
             {questions[currentQuestion].answers.map((answers, index) => (
               <button
-                className="button"
+                className="button bg-white p-6 rounded-sm font-mono m-6"
                 onClick={() =>
                   handleAnswerButtonClick(answers.correct, answers.choice)
                 }
               >
-                {answers.text}
+                <p>{answers.text}</p>
               </button>
             ))}
           </div>
         </>
       )}
+      {correctText && <p>Correct!</p>}
+      {wrongText && <p>Incorrect!</p>}
       {showContext && (
         <>
           <div className="context-section">
@@ -106,7 +113,10 @@ export default function Quiz() {
         </>
       )}
       {showButton && (
-        <button className="button nextButton" onClick={() => nextButtonClick()}>
+        <button
+          className="button nextButton bg-white p-6 rounded-sm font-mono m-6"
+          onClick={() => nextButtonClick()}
+        >
           {buttonText}
         </button>
       )}
