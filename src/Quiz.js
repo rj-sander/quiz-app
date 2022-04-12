@@ -4,7 +4,7 @@ import questions from "./questions";
 
 export default function Quiz() {
   const [results, setResults] = useState([]);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [score, setScore] = useState(0);
   const [showQuestion, setQuestion] = useState(false);
   const [showContext, setContext] = useState(false);
@@ -34,7 +34,7 @@ export default function Quiz() {
     setCurrentQuestion(nextQuestion);
     setCorrectText(false);
     setWrongText(false);
-    if (nextQuestion < questions.length - 1) {
+    if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
       setQuestion(true);
       setAnswers(true);
@@ -64,22 +64,25 @@ export default function Quiz() {
     buttonText = "Next";
   }
 
-  if (currentQuestion > questions.length) {
-    buttonText = "Restart";
+  if (currentQuestion > questions.length - 2) {
+    buttonText = "Finish";
   }
 
   return (
-    <div className="app bg-stone-300 p-6 max-w-2xl mx-auto rounded-xl shadow-lg space-x-4 flex flex-col space-y-4 m-6">
+    <div className="bg-stone-300 lg:w-2/3 w-3/4 p-6 mx-auto rounded-xl shadow-lg flex flex-col  m-6">
       {showScore && (
-        <div className="score-section">
-          You scored {score} out of {questions.length}
+        <div className="score-section pt-6 text-center mx-auto space-y-4">
+          <p>
+            You scored {score} out of {questions.length}
+          </p>
         </div>
       )}
       {showQuestion && (
         <>
-          <div className="question-section">
+          <div className="question-section mx-auto">
             <div className="question-count">
-              <span>Question {currentQuestion}</span>/{questions.length}
+              <span className="">Question {currentQuestion + 1}</span>/
+              {questions.length}
             </div>
             <div className="question-text">
               <p className="font-bold">{questions[currentQuestion].question}</p>
@@ -89,7 +92,7 @@ export default function Quiz() {
       )}
       {showAnswer && (
         <>
-          <div className="answer-section grid gap-4 grid-cols-2">
+          <div className="answer-section grid gap-4 grid-cols-2 mx-auto">
             {questions[currentQuestion].answers.map((answers, index) => (
               <button
                 className="button bg-white p-6 rounded-sm font-mono m-6"
@@ -107,18 +110,28 @@ export default function Quiz() {
       {wrongText && <p>Incorrect!</p>}
       {showContext && (
         <>
-          <div className="context-section">
+          <div className="context-section ">
             {questions[currentQuestion].context}
           </div>
         </>
       )}
       {showButton && (
-        <button
-          className="button nextButton bg-white p-6 rounded-sm font-mono m-6"
-          onClick={() => nextButtonClick()}
-        >
-          {buttonText}
-        </button>
+        <>
+          <div className="mx-auto">
+            <button
+              className="button text-center nextButton bg-white p-6 rounded-sm font-mono m-6"
+              onClick={() => {
+                if (currentQuestion < questions.length - 1) {
+                  nextButtonClick();
+                } else {
+                  window.location.href = "/quiz";
+                }
+              }}
+            >
+              {buttonText}
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
