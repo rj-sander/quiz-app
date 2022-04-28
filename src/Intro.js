@@ -5,7 +5,7 @@ export default function Intro() {
     return (
       <div className="pb-6 inline-block mx-auto">
         <a href="/quiz">
-          <button className="bg-white p-6 rounded-sm font-mono text-lg font-medium">
+          <button className="h-10 px-10 font-semibold rounded-md bg-sky-700">
             Start the Quiz
           </button>
         </a>
@@ -13,16 +13,16 @@ export default function Intro() {
     );
   }
   return (
-    <>
-      <div className="bg-stone-300 lg:w-2/3 w-3/4 p-6 mx-auto rounded-xl shadow-lg flex flex-col  m-6">
+    <div className="bg-gradient-to-r from-indigo-200 to-blue-100">
+      <div className="h-screen py-6 snap-y">
         <div
           id="intro-container"
-          className="container mx-auto flex-col space-y-4 lg:p-10"
+          className="bg-red-300 lg:w-2/3 w-3/4 p-6 m-auto rounded-xl shadow-lg grid grid-cols-1m-6 justify-items-center h-full text-slate-50  snap-center"
         >
-          <h1 className="text-3xl font-bold underline font-serif">
+          <h1 className="text-4xl font-bold underline font-serif">
             Demystifying Your Rights
           </h1>
-          <p className="block font-sans p-4">
+          <p className="block font-sans p-4 hidden md:inline">
             {" "}
             As the{" "}
             <u>
@@ -89,9 +89,9 @@ export default function Intro() {
             learning resource only so that you may familliarise yourself with
             police procedure, and know when they are getting it wrong.
           </p>
+          <StartButton />
         </div>
-        <StartButton />
       </div>
-    </>
+    </div>
   );
 }
